@@ -30,7 +30,7 @@ class Tensor:
             self.zero_grad()
 
     def zero_grad(self) -> None:
-        self.grad = Tensor(np.zeros_like(self.data))
+        self.grad = Tensor(np.zeros_like(self.data, dtype=np.float64))
 
     def __repr__(self) -> str:
         return f"Tensor({self.data},requires_grad={self.requires_grad})"
@@ -43,7 +43,7 @@ class Tensor:
 
         if grad is None:
             if self.shape == ():
-                grad = Tensor(1)
+                grad = Tensor(1.0)
             else:
                 raise RuntimeError("grad must be specified for non-0-Tensor")
 
@@ -86,12 +86,33 @@ def add(t1: Tensor, t2: Tensor) -> Tensor:
 
     if t1.requires_grad:
         def grad_fn1(grad: np.ndarray) -> np.ndarray:
+            # handel broadcasting properly
+
+            # sum out added dims
+            # (2,3)+(3,)
+            ndims_added = grad.ndim - t1.data.ndim
+            for _ in range(ndims_added):
+                grad = grad.sum(axis=0)
+
+            # sum across braodcasted(but non-added dims)
+            # (2,3) + (1,3)
+            for i, dim in enumerate(t1.shape):
+                if dim == 1:
+                    grad = grad.sum(axis=i, keepdims=True)
             return grad
 
         depends_on.append(Dependency(t1, grad_fn1))
 
     if t2.requires_grad:
         def grad_fn2(grad: np.ndarray) -> np.ndarray:
+            ndims_added = grad.ndim - t2.data.ndim
+            for _ in range(ndims_added):
+                grad = grad.sum(axis=0)
+
+            for i, dim in enumerate(t2.shape):
+                if dim == 1:
+                    grad = grad.sum(axis=i, keepdims=True)
+
             return grad
 
         depends_on.append(Dependency(t2, grad_fn2))

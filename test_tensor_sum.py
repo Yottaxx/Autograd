@@ -1,5 +1,5 @@
 import unittest
-from autograd.tensor import Tensor
+from autograd import Tensor
 
 
 class TestTensorSum(unittest.TestCase):
