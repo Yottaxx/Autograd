@@ -15,13 +15,12 @@
   Implement optimize of module.
 
 ##.tests
-  Test for autograd function
-<br>
+  Test for autograd function<br>
 
 `Games to test performance`  
-.fizz_buzz
-.simple_learned_function
-.minimize_a_function
+.fizz_buzz<br>
+.simple_learned_function<br>
+.minimize_a_function<br>
 
 
 
