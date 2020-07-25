@@ -4,18 +4,17 @@
 
 ## autograd
 ###  tensor
-  Implement basic computing between tensors,also,recording depedency between tensors and grad of tensors.
+Realize the function of basic operations between tensors,also,recording dependencies between tensors and the grad of tensors.
 ### function
-  Implement activation function.There is only tanh currently.
+Realize the function of activation function
 ### parameter
-  Quick create random tensors with requires_grad=True.
+Quickly create random tensors with requires_grad=True.
 ### module
-  Implement recording of all parameters
+Realize the function of recording parameters
 ###  optim
-  Implement optimize of module.
-
+Achieve optimization of the model
 ## tests
-  Test for autograd function<br>
+Test for autograd function<br>
 
 `Games to test performance`  
 fizz_buzz<br>

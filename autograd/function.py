@@ -14,3 +14,4 @@ def tanh(tensor: Tensor) -> Tensor:
         depends_on = []
 
     return Tensor(data, requires_grad, depends_on)
+
