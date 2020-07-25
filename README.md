@@ -2,7 +2,7 @@
 `implement by numpy`
 
 
-##.autograd
+## .autograd
 ###  .tensor
   Implement basic computing between tensors,also,recording depedency between tensors and grad of tensors.
 ### ..function
@@ -14,7 +14,7 @@
 ### .. optim
   Implement optimize of module.
 
-##.tests
+## .tests
   Test for autograd function<br>
 
 `Games to test performance`  
