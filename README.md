@@ -12,7 +12,7 @@
 ### module
   Implement: Recording of all parameters
 ###  optim
-  Implement: Optimize of module.
+  Implement: Optimizing for module.
 
 ## tests
   Test for autograd function
