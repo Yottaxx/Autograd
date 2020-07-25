@@ -8,7 +8,7 @@
 ### function
   Implement: Activation function.There is only tanh currently.
 ### parameter
-  Implement: Quick create random tensors with requires_grad=True.
+  Implement: Quickly create random tensors with requires_grad=True.
 ### module
   Implement: Recording of all parameters
 ###  optim
