@@ -1,6 +1,7 @@
 # Simple Torch
 `implement by numpy`
-
+## how to use it
+pip install Torch-Yottaxx==0.1.2
 
 ## autograd
 ###  tensor
