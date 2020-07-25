@@ -1,5 +1,5 @@
 # Simple Torch
-`implement by numpy`
+`pip install Torch-Yottaxx==0.1.2`
 
 
 ## autograd
