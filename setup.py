@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="Torch-Yottaxx",
-    version="0.1.2",
+    version="0.1.3",
     packages=find_packages(),
     author="Yotta",
     author_email="xiaoz987@gmail.com",

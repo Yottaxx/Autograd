@@ -140,7 +140,26 @@ class Tensor:
             backward_grad = dependency.grad_fn(grad.data)
             dependency.tensor.backward(Tensor(backward_grad))
 
+    def exp(self) -> 'Tensor':
+
+        data = np.exp(self.data)
+        requires_grad = self.requires_grad
+        depends_on: List[Dependency] = []
+
+        if requires_grad:
+            def grad_fn(grad: np.ndarray) -> np.ndarray:
+                # handel broadcasting properly
+
+                return grad * data
+
+            depends_on.append(Dependency(self, grad_fn))
+        else:
+            depends_on = []
+
+        return Tensor(data, requires_grad, depends_on)
+
     def transpose(self, intarrayable: IntArrayable) -> 'Tensor':
+
         data = self.data.transpose(ensure_int_array(intarrayable))
         requires_grad = self.requires_grad
         if requires_grad:
@@ -164,6 +183,25 @@ class Tensor:
 
         return Tensor(data, requires_grad, depends_on)
 
+
+def tensor_exp(t: Tensor) -> Tensor:
+    data = np.exp(t.data)
+    requires_grad = t.requires_grad
+    if requires_grad:
+        def grad_fn(grad: np.ndarray) -> np.ndarray:
+            """
+            grad is necessarily a 0-tenosr, so each input element contributes that much
+            :param grad:
+            :return:
+            """
+            return grad * data
+
+        depends_on = [Dependency(t, grad_fn)]
+
+    else:
+        depends_on = []
+
+    return Tensor(data, requires_grad, depends_on)
 
 
 def tensor_sum(t: Tensor) -> Tensor:
