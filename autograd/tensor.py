@@ -9,6 +9,16 @@ class Dependency(NamedTuple):
     grad_fn: Callable[[np.ndarray], np.ndarray]  # 张量依赖关系
 
 
+IntArrayable = Union[tuple, list, np.ndarray]
+
+
+def ensure_int_array(intarrayable: IntArrayable) -> np.ndarray:
+    if isinstance(intarrayable, np.ndarray):
+        return intarrayable
+    else:
+        return np.array(intarrayable, dtype=np.int)
+
+
 Arrayable = Union[float, list, np.ndarray]
 
 
@@ -129,6 +139,31 @@ class Tensor:
         for dependency in self.depends_on:
             backward_grad = dependency.grad_fn(grad.data)
             dependency.tensor.backward(Tensor(backward_grad))
+
+    def transpose(self, intarrayable: IntArrayable) -> 'Tensor':
+        data = self.data.transpose(ensure_int_array(intarrayable))
+        requires_grad = self.requires_grad
+        if requires_grad:
+            def grad_fn(grad: np.ndarray) -> np.ndarray:
+                """
+                grad is necessarily a 0-tenosr, so each input element contributes that much
+                :param grad:
+                :return:
+                """
+                array = ensure_int_array(intarrayable).squeeze()
+                index = [x for x in range(len(array))]
+                index_array = dict(zip(array, index))
+                index_array = list(sorted(index_array.items(), key=lambda item: item[0]))
+                index_array = [y[1] for x, y in enumerate(index_array)]
+                return grad.transpose(ensure_int_array(index_array))
+
+            depends_on = [Dependency(self, grad_fn)]
+
+        else:
+            depends_on = []
+
+        return Tensor(data, requires_grad, depends_on)
+
 
 
 def tensor_sum(t: Tensor) -> Tensor:

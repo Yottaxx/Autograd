@@ -3,6 +3,7 @@ from typing import List
 from autograd import Tensor, Parameter, Module
 from autograd.optim import SGD
 from autograd.function import tanh
+from autograd.Layers import Linear, SimpleAttention
 
 """
 print the numbers 1 to 100,
@@ -38,17 +39,14 @@ y_train = Tensor([fizz_buzz_encode(x) for x in range(101, 1024)])
 
 class FizzBuzzModule(Module):
     def __init__(self, num_hidden: int = 50) -> None:
-        self.w1 = Parameter(10, num_hidden)
-        self.b1 = Parameter(num_hidden)
-
-        self.w2 = Parameter(num_hidden, 4)
-        self.b2 = Parameter(4)
+        self.linear = Linear(10, num_hidden)
+        self.linear2 = Linear(num_hidden, 4)
 
     def predict(self, in_puts: Tensor):
         # inputs (batch_size,10)
-        x1 = in_puts @ self.w1 + self.b1  # (batch_size,num_hidden)
+        x1 = self.linear(in_puts)
         x2 = tanh(x1)
-        x3 = x2 @ self.w2 + self.b2  # (batch_size,4)
+        x3 = self.linear2(x2)  # (batch_size,4)
         return x3
 
 
@@ -98,4 +96,4 @@ for x in range(1, 101):
         num_correct += 1
     print(x, labels[predicted_idx], labels[actual_idx])
 
-print(num_correct,"/100")
+print(num_correct, "/100")
