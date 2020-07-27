@@ -2,7 +2,7 @@ import numpy as np
 from typing import List
 from autograd import Tensor, Parameter, Module
 from autograd.optim import SGD
-from autograd.function import tanh
+from autograd.function import tanh,sigmoid
 
 """
 print the numbers 1 to 100,
@@ -47,7 +47,7 @@ class FizzBuzzModule(Module):
     def predict(self, in_puts: Tensor):
         # inputs (batch_size,10)
         x1 = in_puts @ self.w1 + self.b1  # (batch_size,num_hidden)
-        x2 = tanh(x1)
+        x2 = sigmoid(x1)
         x3 = x2 @ self.w2 + self.b2  # (batch_size,4)
         return x3
 
