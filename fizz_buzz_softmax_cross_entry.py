@@ -2,7 +2,7 @@ import numpy as np
 from typing import List
 from autograd import Tensor, Parameter, Module
 from autograd.optim import SGD
-from autograd.function import tanh,sofxmax
+from autograd.function import tanh, cross_entry_softmax
 from autograd.Layers import Linear, SimpleAttention
 
 """
@@ -73,8 +73,7 @@ for epoch in range(10000):
 
         predicted = module.predict(inputs)
         actual = y_train[start:end]
-        errors = predicted - actual
-        loss = (errors * errors).sum()
+        loss = cross_entry_softmax(predicted, actual,-1)
 
         loss.backward()
         epoch_loss += loss.data
